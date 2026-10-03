@@ -41,11 +41,11 @@ For a manual walkthrough based on the playground notes app, see the
    use native pickers with one question per screen; no questionnaire dump or
    failed shell check for a missing state directory.
 2. **Existing unfamiliar repository:** Use a separate copy of a real repository.
-   Choose the existing-repository flow. Confirm Agent reads actual entry points
+   Choose the existing-repository flow. Confirm the agent reads actual entry points
    and configuration, gives an accurate short map before familiarity questions,
    asks whole-system versus focused scope, and doesn't invent a frontend/database.
 3. **Checkpoint → implementation:** Ask for a meaningful feature, such as durable
-   storage or retrying an external request. Confirm Agent asks one reasoning
+   storage or retrying an external request. Confirm The agent asks one reasoning
    question under a title naming the decision, before suggesting its own solution
    or implementing the decision. Give a partial answer; check that
    it refines the answer, names the coding scope in an Implementation checkpoint,
@@ -55,7 +55,7 @@ For a manual walkthrough based on the playground notes app, see the
    paused and updates the approach if needed. Select Implement this step;
    check it writes the code and records only evidenced learning. Restart while a
    confirmation is pending and confirm it preserves that pause.
-4. **Skip and adaptation:** Say “I'm completely lost.” Confirm Agent explains
+4. **Skip and adaptation:** Say “I'm completely lost.” Confirm the agent explains
    the relevant pieces and returns one manageable reasoning step, without dumping
    a complete plan or repeatedly demanding guesses. Ask for an explanation or say “skip”; it should
    explain and proceed to a Design checkpoint without demanding another attempt. “Just
@@ -67,7 +67,7 @@ For a manual walkthrough based on the playground notes app, see the
 6. **Guided foundations:** With a beginner profile and a new project, check that
    essential capabilities are established and preserved when selecting a platform;
    stack, storage, and deployment must remain visible open decisions. Ask what an
-   unfamiliar term means while answering a checkpoint. Agent should explain it
+   unfamiliar term means while answering a checkpoint. The agent should explain it
    and return to a manageable reasoning step, not bundle new architecture choices
    into an implementation approval. Use different projects to avoid overfitting.
    When labeling an explanation, use Concept for what something is or how it works,
@@ -80,12 +80,12 @@ For a manual walkthrough based on the playground notes app, see the
    Design checkpoint first. Several Build checkpoints may lead to one confirmation.
    Option descriptions should invite clarification and express readiness to proceed;
    choosing confirmation alone must not be recorded as demonstrated understanding.
-   If Agent proposes additional implementation details, check that a concise list
+   If the agent proposes additional implementation details, check that a concise list
    or Detail / Proposal / Why it matters table distinguishes them from learner
    decisions. Selecting Discuss should allow questions about individual items;
    unresolved consequential design choices still require learner reasoning.
 7. **Preference versus reasoning:** Answer a checkpoint with a tentative preference
-   and no rationale. Agent should ask one focused question about implications or
+   and no rationale. The agent should ask one focused question about implications or
    tradeoffs, not invent the learner's reasoning, praise mastery, or immediately
    present confirmation buttons. Verify that this holds across different projects.
 8. **Diagrams:** During orientation or a system check, confirm a compact terminal
@@ -100,13 +100,13 @@ For a manual walkthrough based on the playground notes app, see the
    onboarding and confirmations, with no trailing paragraphs obscuring the response point.
    Reasoning questions should be open-ended in chat, not in a picker or its notes field.
 9. **Clarification without steering:** Ask about an unfamiliar concept mid-decision.
-   Agent should clarify it, correct any misleading framing, and return to one
+   The agent should clarify it, correct any misleading framing, and return to one
    question about the project's requirements or constraints. It should not replace
    reasoning with a solution menu, bundle independent choices, or steer toward an
    architecture because it offers more learning opportunities.
 10. **Learning first:** With default preferences, make an ordinary build request.
     Before any recommendation, solution menu, revealing diagram, dependency install,
-    or application scaffold, Agent must ask for the learner's approach and wait.
+    or application scaffold, The agent must ask for the learner's approach and wait.
     Answer, then check that refinement doesn't silently decide the next problem.
     Test unfamiliar concepts with neutral background, and familiar concepts with
     a new tradeoff: neither should remove the learner's turn to reason. Explicitly
@@ -121,7 +121,7 @@ For a manual walkthrough based on the playground notes app, see the
     Experience must not change the saved checkpoint frequency.
 
 12. **Evaluation and concise confirmation:** Give a confident but flawed proposal;
-    Agent should name the violated constraint rather than praise confidence.
+    The agent should name the violated constraint rather than praise confidence.
     Give a sound proposal; it should explain why and combine feedback with a concise
     Design checkpoint, without redundant questions. Compare two viable approaches:
     tradeoffs should be tied to the project, not a claim of one correct answer.
@@ -134,13 +134,13 @@ For a manual walkthrough based on the playground notes app, see the
     again and confirm: original notes must exist in the reported backup, the
     active profile must be incomplete, and onboarding must ask fresh questions
     rather than reuse old preferences. Repeat with legacy notes and after restart.
-    If notes change during confirmation, Agent must preview and confirm again.
+    If notes change during confirmation, The agent must preview and confirm again.
 
 14. **Requirements versus design:** Give a product requirement without proposing
-    a mechanism. Agent should record the requirement, then invite a concrete
+    a mechanism. The agent should record the requirement, then invite a concrete
     design attempt before offering a solution or confirmation. It must not count
     the requirement as demonstrated engineering understanding. Combine a near-term
-    single-user pilot with future public availability; Agent should preserve both
+    single-user pilot with future public availability; The agent should preserve both
     rather than invent a contradiction or choose the storage layout itself. Ask
     for grounding: the response should clarify concepts and return an open design
     step, not give the complete design and quiz the learner on recalling it.
@@ -151,9 +151,9 @@ For a manual walkthrough based on the playground notes app, see the
     should clarify the learner's model, preserving unknown links until discussed,
     rather than present a complete architecture for the learner to rubber-stamp.
     After clarifying desired behavior and edge cases, check the handoff to technical
-    design: Agent must invite the learner's representation before supplying its
+    design: The agent must invite the learner's representation before supplying its
     own structure, including through an explanatory diagram.
-15. **Implementation report:** After an approved step, Agent should explain the
+15. **Implementation report:** After an approved step, The agent should explain the
     changed files, important code mechanics, connection to the learner's design,
     any tests added or updated and what they cover, and actual verification results.
     Distinguish tests written from checks run; unrun checks must be explicit.
@@ -163,7 +163,7 @@ For a manual walkthrough based on the playground notes app, see the
     Feedback should be factual and specific, with no personal praise, hype, or
     congratulatory filler. Corrections should be direct without belittling.
 16. **Coherent reasoning and faithful confirmation:** Offer a rough component list
-    before the overall flow is understood. Agent should invite the learner to
+    before the overall flow is understood. The agent should invite the learner to
     connect responsibilities and flows rather than immediately start a chain of
     implementation-detail questions. When the learner is stuck, explain the missing
     concept directly and return to a meaningful decision, without hints that funnel
@@ -177,18 +177,17 @@ user and receiving their instruction to make the edit.
 
 ## Design and official references
 
-Verified against current first-party documentation on 2026-09-28 (your harness
-plugin version) and 2026-10-03 (Agent Skills port):
+Verified against current first-party documentation on 2026-09-28 (Claude Code plugin version) and 2026-10-03 (Agent Skills port):
 
 - [Agent Skills specification](https://agentskills.io/specification):
   `SKILL.md` with `name`/`description` frontmatter, optional `scripts/`,
   `references/`, and `assets/` directories, relative file links from the skill
   root, and progressive disclosure.
 - [skills.sh](https://www.skills.sh/docs): skills install with
-  `npx skills add <owner>/<repo>` and work across your harness, OpenCode,
+  `npx skills add <owner>/<repo>` and work across Claude Code, OpenCode,
   Cursor, Codex, and other agents.
 
-The your harness plugin version used a `SessionStart` hook to restore learning
+The Claude Code plugin version used a `SessionStart` hook to restore learning
 context automatically. Agent Skills have no hook equivalent, so restoration
 happens when the `learn` skill is loaded: it reads the state directory, profile,
 map, and pending decisions itself. State writes are performed by the agent
@@ -204,5 +203,5 @@ under the user's existing data settings.
 
 Reset helper tests: 11 of 14 pass on Windows; the 3 failures require Administrator/developer mode
 for symlink creation (WinError 1314) and are environmental, not port bugs.
-The your harness plugin version's full verification history (hook tests, live
+The Claude Code plugin version's full verification history (hook tests, live
 sessions, and smoke-test notes) is preserved in the upstream repository.
