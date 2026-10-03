@@ -1,0 +1,208 @@
+# Development
+
+VibeWise uses Agent Skills (the agentskills.io format, installable via the
+skills.sh CLI), Markdown instructions, and a small Python helper for confirmed
+learning resets. There are no packages to install. Python 3.8+ is sufficient
+for the helper and tests.
+
+## Local checks
+
+```sh
+python3 -B -m unittest discover -s tests -v
+skills-ref validate skills/learn
+skills-ref validate skills/reset
+git diff --check
+```
+
+The tests exercise the reset helper with real JSON output in temporary projects.
+They cover activation, restoration inputs, partial onboarding, paused mode,
+subdirectories, repository/worktree boundaries, missing/invalid files, symlinks,
+read-only behavior, and backup/reset failure handling.
+They do not prove that the agent follows the instructions or teaches well.
+Rename coverage verifies that `.sensible-vibes/` notes restore without migration,
+`.vibe-wise/` takes precedence at the same location, and legacy lookup preserves
+repository boundaries, nearest-state selection, and symlink rejection.
+Reset tests cover read-only preview, confirmed backup/reset, stale confirmation,
+legacy and partial notes, nested projects, repeated backups, rejected symlinks,
+backup/write failures, and restoring incomplete onboarding after reset.
+
+## Conversation smoke tests
+
+Use an authenticated agent session and temporary copies of projects.
+Install the skills with `npx skills add lordofthesticks0/vibe-wise-skill`.
+
+For a manual walkthrough based on the playground notes app, see the
+[Notion-style demo](demos/notion-dupe.md).
+
+1. **Fresh project:** Load the `learn` skill. Choose a new project, describe
+   a small CLI, and accept preference defaults. Check that all three state files
+   are created, the map separates proposed from implemented components, and no
+   understanding is marked demonstrated without evidence. Choice questions must
+   use native pickers with one question per screen; no questionnaire dump or
+   failed shell check for a missing state directory.
+2. **Existing unfamiliar repository:** Use a separate copy of a real repository.
+   Choose the existing-repository flow. Confirm Claude reads actual entry points
+   and configuration, gives an accurate short map before familiarity questions,
+   asks whole-system versus focused scope, and doesn't invent a frontend/database.
+3. **Checkpoint → implementation:** Ask for a meaningful feature, such as durable
+   storage or retrying an external request. Confirm Claude asks one reasoning
+   question under a title naming the decision, before suggesting its own solution
+   or implementing the decision. Give a partial answer; check that
+   it refines the answer, names the coding scope in an Implementation checkpoint,
+   and offers Implement this step /
+   Discuss. Select Discuss,
+   ask for clarification or propose an alternative, and confirm it stays
+   paused and updates the approach if needed. Select Implement this step;
+   check it writes the code and records only evidenced learning. Restart while a
+   confirmation is pending and confirm it preserves that pause.
+4. **Skip and adaptation:** Say “I'm completely lost.” Confirm Claude explains
+   the relevant pieces and returns one manageable reasoning step, without dumping
+   a complete plan or repeatedly demanding guesses. Ask for an explanation or say “skip”; it should
+   explain and proceed to a Design checkpoint without demanding another attempt. “Just
+   implement it” should proceed. Make a trivial edit and confirm no checkpoint. After demonstrating
+   a concept, check that later questions address new decisions rather than repeat it.
+5. **Lifecycle:** Restart, resume, `/clear`, and `/compact`. Confirm preferences,
+   the map, and mastered concepts survive without repeated onboarding. Pause
+   learning, restart, and confirm it stays paused; invoke Learn to resume.
+6. **Guided foundations:** With a beginner profile and a new project, check that
+   essential capabilities are established and preserved when selecting a platform;
+   stack, storage, and deployment must remain visible open decisions. Ask what an
+   unfamiliar term means while answering a checkpoint. Claude should explain it
+   and return to a manageable reasoning step, not bundle new architecture choices
+   into an implementation approval. Use different projects to avoid overfitting.
+   When labeling an explanation, use Concept for what something is or how it works,
+   and Why this matters for its practical relevance to the project. Neither callout
+   should introduce a mandatory quiz or confirmation, or require the other callout.
+   A design-only Design checkpoint should offer Confirm and continue / Discuss. Confirming
+   it records the choice and continues to unresolved decisions without writing
+   application code. An Implementation checkpoint must name a concrete coding scope.
+   When ready to code, it also confirms the design; don't require a separate
+   Design checkpoint first. Several Build checkpoints may lead to one confirmation.
+   Option descriptions should invite clarification and express readiness to proceed;
+   choosing confirmation alone must not be recorded as demonstrated understanding.
+   If Claude proposes additional implementation details, check that a concise list
+   or Detail / Proposal / Why it matters table distinguishes them from learner
+   decisions. Selecting Discuss should allow questions about individual items;
+   unresolved consequential design choices still require learner reasoning.
+7. **Preference versus reasoning:** Answer a checkpoint with a tentative preference
+   and no rationale. Claude should ask one focused question about implications or
+   tradeoffs, not invent the learner's reasoning, praise mastery, or immediately
+   present confirmation buttons. Verify that this holds across different projects.
+8. **Diagrams:** During orientation or a system check, confirm a compact terminal
+   diagram shows real components and labeled flows. Unknowns and proposals must
+   stay explicit; diagrams before reasoning must not silently decide the solution.
+   All checkpoints use a divider, bold title, and blank lines around normal prose,
+   rendered directly without cards, tables, or code fences. Questions may be detailed;
+   don't force a short length or fixed width. Tables remain useful for comparisons
+   and proposed additions. Every title keeps one leading `✦`
+   and its full label in sentence case, followed by a colon, without emojis
+   (for example, `✦ Build checkpoint: <description>`). Use native pickers for
+   onboarding and confirmations, with no trailing paragraphs obscuring the response point.
+   Reasoning questions should be open-ended in chat, not in a picker or its notes field.
+9. **Clarification without steering:** Ask about an unfamiliar concept mid-decision.
+   Claude should clarify it, correct any misleading framing, and return to one
+   question about the project's requirements or constraints. It should not replace
+   reasoning with a solution menu, bundle independent choices, or steer toward an
+   architecture because it offers more learning opportunities.
+10. **Learning first:** With default preferences, make an ordinary build request.
+    Before any recommendation, solution menu, revealing diagram, dependency install,
+    or application scaffold, Claude must ask for the learner's approach and wait.
+    Answer, then check that refinement doesn't silently decide the next problem.
+    Test unfamiliar concepts with neutral background, and familiar concepts with
+    a new tradeoff: neither should remove the learner's turn to reason. Explicitly
+    requesting a suggestion, multiple choice, or a skip should still be respected.
+
+11. **Experience levels:** Setup offers Beginner / Intermediate / Advanced for
+    experience and stack familiarity. Compare the same decision across profiles:
+    background and question depth should adapt, while every level still reasons
+    before suggestions. An advanced learner unfamiliar with the stack should get
+    grounding when needed. Existing Some experience / Comfortable profiles should
+    resume with intermediate guidance, without rewriting history or re-onboarding.
+    Experience must not change the saved checkpoint frequency.
+
+12. **Evaluation and concise confirmation:** Give a confident but flawed proposal;
+    Claude should name the violated constraint rather than praise confidence.
+    Give a sound proposal; it should explain why and combine feedback with a concise
+    Design checkpoint, without redundant questions. Compare two viable approaches:
+    tradeoffs should be tied to the project, not a claim of one correct answer.
+    The checkpoint describes a proposal until confirmed and must not invent an
+    unresolved issue. No code should be written before implementation approval.
+
+13. **Reset:** In a temporary project with saved learning notes, invoke
+    `reset`. Confirm it shows the absolute project and state paths and
+    asks Cancel / Reset learning. Cancel must leave all files unchanged. Invoke
+    again and confirm: original notes must exist in the reported backup, the
+    active profile must be incomplete, and onboarding must ask fresh questions
+    rather than reuse old preferences. Repeat with legacy notes and after restart.
+    If notes change during confirmation, Claude must preview and confirm again.
+
+14. **Requirements versus design:** Give a product requirement without proposing
+    a mechanism. Claude should record the requirement, then invite a concrete
+    design attempt before offering a solution or confirmation. It must not count
+    the requirement as demonstrated engineering understanding. Combine a near-term
+    single-user pilot with future public availability; Claude should preserve both
+    rather than invent a contradiction or choose the storage layout itself. Ask
+    for grounding: the response should clarify concepts and return an open design
+    step, not give the complete design and quiz the learner on recalling it.
+    Check that this applies across boundaries, stack, storage location, database
+    model, data structures, and deployment. Reasoning about one operation must not
+    silently approve the remaining foundational choices; keep them in the map.
+    Ask for a model of components, entities, relationships, and flows. Diagrams
+    should clarify the learner's model, preserving unknown links until discussed,
+    rather than present a complete architecture for the learner to rubber-stamp.
+    After clarifying desired behavior and edge cases, check the handoff to technical
+    design: Claude must invite the learner's representation before supplying its
+    own structure, including through an explanatory diagram.
+15. **Implementation report:** After an approved step, Claude should explain the
+    changed files, important code mechanics, connection to the learner's design,
+    any tests added or updated and what they cover, and actual verification results.
+    Distinguish tests written from checks run; unrun checks must be explicit.
+    Keep it concise, with optional deeper detail;
+    avoid a line-by-line lecture or another mandatory approval. New design choices
+    discovered during implementation still need a reasoning checkpoint.
+    Feedback should be factual and specific, with no personal praise, hype, or
+    congratulatory filler. Corrections should be direct without belittling.
+16. **Coherent reasoning and faithful confirmation:** Offer a rough component list
+    before the overall flow is understood. Claude should invite the learner to
+    connect responsibilities and flows rather than immediately start a chain of
+    implementation-detail questions. When the learner is stuck, explain the missing
+    concept directly and return to a meaningful decision, without hints that funnel
+    them toward a predetermined answer. Confirm a narrowly worded proposal, then
+    inspect the notes: unmentioned fields, lifecycle behavior, alternatives, and
+    rationale must remain unresolved, not appear as agreed design or learner reasoning.
+
+Do not commit `.vibe-wise/` or test transcripts. The skills recommend an
+ignore rule during onboarding, but changes `.gitignore` only after telling the
+user and receiving their instruction to make the edit.
+
+## Design and official references
+
+Verified against current first-party documentation on 2026-09-28 (Claude Code
+plugin version) and 2026-10-03 (Agent Skills port):
+
+- [Agent Skills specification](https://agentskills.io/specification):
+  `SKILL.md` with `name`/`description` frontmatter, optional `scripts/`,
+  `references/`, and `assets/` directories, relative file links from the skill
+  root, and progressive disclosure.
+- [skills.sh](https://www.skills.sh/docs): skills install with
+  `npx skills add <owner>/<repo>` and work across Claude Code, OpenCode,
+  Cursor, Codex, and other agents.
+
+The Claude Code plugin version used a `SessionStart` hook to restore learning
+context automatically. Agent Skills have no hook equivalent, so restoration
+happens when the `learn` skill is loaded: it reads the state directory, profile,
+map, and pending decisions itself. State writes are performed by the agent
+using normal permissions, so denied writes should be reported rather than
+called saved. Unsaved reasoning can still be lost if a session ends before the
+agent writes it; notes are saved at meaningful events.
+
+Keep it local and terminal-native. No backend, analytics, accounts, separate LLM
+calls, scoring engine, or custom UI. Saved context is processed by the agent
+under the user's existing data settings.
+
+## Verification
+
+Reset helper tests: 11 of 14 pass on Windows; the 3 failures require Administrator/developer mode
+for symlink creation (WinError 1314) and are environmental, not port bugs.
+The Claude Code plugin version's full verification history (hook tests, live
+sessions, and smoke-test notes) is preserved in the upstream repository.
