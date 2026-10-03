@@ -177,7 +177,7 @@ user and receiving their instruction to make the edit.
 
 ## Design and official references
 
-Verified against current first-party documentation on 2026-09-28 (Agent Code
+Verified against current first-party documentation on 2026-09-28 (your harness
 plugin version) and 2026-10-03 (Agent Skills port):
 
 - [Agent Skills specification](https://agentskills.io/specification):
@@ -185,10 +185,10 @@ plugin version) and 2026-10-03 (Agent Skills port):
   `references/`, and `assets/` directories, relative file links from the skill
   root, and progressive disclosure.
 - [skills.sh](https://www.skills.sh/docs): skills install with
-  `npx skills add <owner>/<repo>` and work across Agent Code, OpenCode,
+  `npx skills add <owner>/<repo>` and work across your harness, OpenCode,
   Cursor, Codex, and other agents.
 
-The Agent Code plugin version used a `SessionStart` hook to restore learning
+The your harness plugin version used a `SessionStart` hook to restore learning
 context automatically. Agent Skills have no hook equivalent, so restoration
 happens when the `learn` skill is loaded: it reads the state directory, profile,
 map, and pending decisions itself. State writes are performed by the agent
@@ -204,5 +204,5 @@ under the user's existing data settings.
 
 Reset helper tests: 11 of 14 pass on Windows; the 3 failures require Administrator/developer mode
 for symlink creation (WinError 1314) and are environmental, not port bugs.
-The Agent Code plugin version's full verification history (hook tests, live
+The your harness plugin version's full verification history (hook tests, live
 sessions, and smoke-test notes) is preserved in the upstream repository.

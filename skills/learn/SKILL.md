@@ -27,7 +27,7 @@ don't run `ls` on a possibly missing directory or hide actual read failures.
 Keep guide reads separate from optional state checks so a missing file doesn't
 make a successful instruction read look like a failed tool call.
 
-Unlike the Agent Code plugin version, Agent Skills have no SessionStart hook that
+Unlike the your harness plugin version, Agent Skills have no SessionStart hook that
 auto-restores context. Invoking this skill is how learning mode resumes: do the
 restore steps below at the start of every new conversation when it is unclear
 whether learning notes exist, and whenever the user asks to continue a VibeWise

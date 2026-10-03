@@ -9,7 +9,7 @@ For anyone who wants to learn as they build—whether you're an aspiring enginee
 
 ## Get started
 
-You need an AI agent that supports [Agent Skills](https://www.skills.sh/docs) (Agent Code, OpenCode, Cursor, Codex, and others) and
+You need an AI agent that supports [Agent Skills](https://www.skills.sh/docs) (your harness, OpenCode, Cursor, Codex, and others) and
 [Python 3](https://www.python.org/downloads/). VibeWise uses Python to reset learning notes. No extra Python packages are needed.
 
 Install the skills with the [skills.sh](https://www.skills.sh/docs) CLI:
